@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="PalleTracker " />
+        <module name="PalleTracker" />
+        <module name="last-version" />
+        <module name="backend-master 3 2" />
+        <module name="backend-master 3 2 4 4" />
+        <module name="backend-master 3 2 4" />
+        <module name="NewBilinglastVersion" />
+        <module name="NewBilinglastVersion 4" />
+        <module name="nEWbillingLastVersion" />
+        <module name="billing" />
+        <module name="backend-master 3" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="NewBilinglastVersion" options="-parameters" />
+      <module name="NewBilinglastVersion 4" options="-parameters" />
+      <module name="NewBilinglastVersion 4 2" options="-parameters" />
+      <module name="NewBilinglastVersion 4 2 2" options="-parameters" />
+      <module name="NewBilinglastVersion 4 2 2 3" options="-parameters" />
+      <module name="PalleTracker" options="-parameters" />
+      <module name="PalleTracker " options="-parameters" />
+      <module name="backend-master 3" options="-parameters" />
+      <module name="backend-master 3 2" options="-parameters" />
+      <module name="backend-master 3 2 4" options="-parameters" />
+      <module name="backend-master 3 2 4 4" options="-parameters" />
+      <module name="billing" options="-parameters" />
+      <module name="last-version" options="-parameters" />
+      <module name="nEWbillingLastVersion" options="-parameters" />
+    </option>
+  </component>
+</project>
