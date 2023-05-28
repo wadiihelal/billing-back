@@ -41,8 +41,8 @@ jobs:
 
       - name: Set up Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
 
       - name: Build and Push Docker Image
         run: |
@@ -59,8 +59,8 @@ jobs:
 
       - name: Set up Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
 
       - name: Deploy Container
         run: |
