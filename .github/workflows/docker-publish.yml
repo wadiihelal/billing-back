@@ -28,7 +28,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t wadiih/billing_back:${{ github.sha }} .
-          docker login -u wadiih -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker login -u wadiih -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker push wadiih/billing_back:${{ github.sha }}
 
 
