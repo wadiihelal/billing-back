@@ -39,5 +39,5 @@ jobs:
         - name: Pull Docker image
           run: docker pull wadiih/billing_back:${{ github.sha }}
         - name: Run Docker container
-          run: docker run -d -p 9090:9090 wadiih/billing_back:${{ github.sha }}
+          run: docker run -d -p 9090:9090 wadiih/billing_back:latest
 
