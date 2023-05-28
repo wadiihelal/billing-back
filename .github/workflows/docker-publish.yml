@@ -46,9 +46,9 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          echo ${{ secrets.CI_REGISTRY_PASSWORD }} | docker login -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin ${{ secrets.CI_REGISTRY }}
-          docker build -t ${{ secrets.CI_REGISTRY_IMAGE }} .
-          docker push ${{ secrets.CI_REGISTRY_IMAGE }}
+          echo "${{ secrets.CI_REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.CI_REGISTRY_USER }}" --password-stdin
+          docker build -t "${{ secrets.CI_REGISTRY_IMAGE }}" .
+          docker push "${{ secrets.CI_REGISTRY_IMAGE }}"
 
   deploy:
     runs-on: ubuntu-latest
@@ -66,4 +66,4 @@ jobs:
         run: |
           docker stop my-container || true
           docker rm my-container || true
-          docker run -d --name my-container -p 9091:9091 ${{ secrets.CI_REGISTRY_IMAGE }}
+          docker run -d --name my-container -p 9091:9091 "${{ secrets.CI_REGISTRY_IMAGE }}"
