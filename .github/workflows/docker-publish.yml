@@ -6,8 +6,9 @@ on:
       - main
 
 jobs:
-  maven-install:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,52 +19,27 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Build with Maven
-        run: mvn install
-        working-directory: ${{ github.workspace }}
-        env:
-          CI_REGISTRY_USER: ${{ secrets.CI_REGISTRY_USER }}
-          CI_REGISTRY_PASSWORD: ${{ secrets.CI_REGISTRY_PASSWORD }}
-          CI_REGISTRY_IMAGE: ${{ secrets.CI_REGISTRY_IMAGE }}
-
-      - name: Upload Jar Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: jar
-          path: target/*.jar
- 
-  docker-build:
-    runs-on: ubuntu-latest
-    needs: maven-install
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Build and Package
+        run: mvn clean package
 
       - name: Set up Docker
-        run: |
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
+        uses: docker/setup-docker@v1
 
-      - name: Build and Push Docker Image
+      - name: Build Docker image
         run: |
-          echo "${{ secrets.CI_REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.CI_REGISTRY_USER }}" --password-stdin
-          docker build -t "${{ secrets.CI_REGISTRY_IMAGE }}" .
-          docker push "${{ secrets.CI_REGISTRY_IMAGE }}"
+          docker build -t wadiih/billing_back:${{ github.sha }} .
+          docker login -u wadiih -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push wadiih/billing_back:${{ github.sha }}
 
-  deploy:
+  deploy-locally:
     runs-on: ubuntu-latest
-    needs: docker-build
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Set up Docker
-        run: |
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
+        uses: docker/setup-docker@v1
 
-      - name: Deploy Container
-        run: |
-          docker stop my-container || true
-          docker rm my-container || true
-          docker run -d --name my-container -p 9091:9091 "${{ secrets.CI_REGISTRY_IMAGE }}"
+      - name: Pull Docker image
+        run: docker pull wadiih/billing_back:${{ github.sha }}
+
+      - name: Run Docker container
+        run: docker run -d -p 9090:9090 wadiih/billing_back:${{ github.sha }}
