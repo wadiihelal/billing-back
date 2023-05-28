@@ -12,8 +12,7 @@ import java.util.*;
 @AllArgsConstructor
 public class Ordre {
     @Id
-    private long idOrder;
-
+    private Long idOrder;
     private String clientPoNumber;
     private Date dateReceipt;
     private Date proofDate;

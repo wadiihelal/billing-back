@@ -36,10 +36,9 @@ public class BillingService {
     @Autowired
     private ProformaRepositpry proformaRepo;
     public List<Ordre> getOrders (){
-    addClients();
-    NewOrders();
+    //addClients();
+    //NewOrders();
      List<Ordre>orderList=ordreRepository.findAll();
-        System.out.println(orderList.get(0)+"0 ord");
         for (Ordre ordre:orderList){
         if (ordre.isProformaCreated()==false && ordre.isOrdreInvoiced()==false){
             ArrayList l=new ArrayList<Ordre>();
@@ -80,9 +79,7 @@ public class BillingService {
                     Collection<Package> packages=productionPart.getPackages();
                        for (Package aPackage : packages) {
                      ordre.setShipAccountName( aPackage.getShipAccountName());
-                     System.out.println(ordre.getShipAccountName());
                      ordre.setBillAccountName(aPackage.getBillAccountName());
-                     System.out.println(ordre.getBillAccountName());
                      }
 
                  */
@@ -199,7 +196,7 @@ public class BillingService {
         }
         return test;
     }
-        public List<Ordre> NewOrders() {
+    public List<Ordre> NewOrders() {
          String url = "http://192.168.75.22:8057/OrdresForBilling";
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", "application/json");
@@ -390,7 +387,6 @@ public class BillingService {
             proforma.setSiren((orders.get(i).getClientId()));
             for(int j=0;j<orders.get(i).getPackingSlips().size();j++){
                 if(orders.get(i).getPackingSlips().get(j).getPsId()!=null){
-                    //System.out.println("PSid"+orders.get(i).getPackingSlips().get(j).getPsId());
                     dsNumbers.add(orders.get(i).getPackingSlips().get(j).getPsId());}}
             proforma.setTotalCost(orders.get(i).getTotalCost());
             Client client=clientRepository.findClientBySiren(orders.get(i).getClientId());
@@ -404,8 +400,6 @@ public class BillingService {
 
 
                 invoiceLine.setPoNumber(orders.get(i).getOrderNum());
-           // invoiceLine.setOemPo(orders.get(i).getProductionParts().get(i).getPartid());
-          //  System.out.println(invoiceLine.getOemPo());
             invoiceLine.setUnitPrice((float) orders.get(i).getProductionParts().get(0).getUnitPrice());
               if(client.getSiren().equals("CAI")){
             invoiceLine.setPartId(orders.get(i).getProductionParts().get(0).getClientPartNum());}
@@ -479,16 +473,15 @@ public class BillingService {
                 if (proforma.getSiren().equals("SAV")){
                     Instant nextDays=instant.plus(45, ChronoUnit.DAYS);
                     proforma.setDueDate(Date.from(nextDays));
-                    System.out.println("sav"+Date.from(nextDays));
                 }
                 else {
                     Instant nextDays=instant.plus(30, ChronoUnit.DAYS);
                     proforma.setDueDate(Date.from(nextDays));
-                    System.out.println("others"+Date.from(nextDays));
 
                     ;}
         //orders.get(i).setInvoiceDelay(d);
         orders.get(i).setProformaCreated(true);
+                System.out.println(orders.get(i).isProformaCreated());
         ordreRepository.save(orders.get(i));
         proformaRepo.save(proforma);
     }}
@@ -779,21 +772,7 @@ public class BillingService {
         });
         List<PackingSlips> lisfOfPs= (response.getBody());
         o.setPackingSlips(lisfOfPs);
-       // Psrepo.saveAll(lisfOfPs);
         List<PackingSlips> lisfOfPs1 = null;
-      /* for(PackingSlips ps:lisfOfPs){
-           Long psId=ps.getPsId();
-           String url1 = "http://192.168.75.22:7777/SHIPPINGSTATION/packingSlipsforPdf/"+psId;
-           HttpHeaders headers1 = new HttpHeaders();
-           headers1.add("Accept", "application/json");
-            ResponseEntity<List<PackingSlips>> response1 = restTemplate.exchange(url1, HttpMethod.GET, new HttpEntity<Object>(headers), new ParameterizedTypeReference<List<PackingSlips>>() {
-            });
-          lisfOfPs1= (response1.getBody());
-           o.setBonLivraisonlId(lisfOfPs1.get(0).getBonLivraisonlId());
-           System.out.println(lisfOfPs1.get(0).getBonLivraisonlId());
-          }
-
-       */
         return lisfOfPs;
     }
     public Invoice validateProforma( Proforma proforma){
@@ -974,7 +953,6 @@ public class BillingService {
       List<Proforma>ll=  proformaRepo.findAll();
       for (Proforma p:ll) {
          if  ( p.getInvoiceLines().get(0).getIdOrder()==id){
-           //  System.out.println("mawjouda");
              return p;
          }
       }
