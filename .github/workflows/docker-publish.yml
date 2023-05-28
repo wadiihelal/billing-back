@@ -54,15 +54,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
       - name: Deploy Container
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.CI_REGISTRY_IMAGE }}
-          target: my-container
-          ports: 9091:9091
-          env:
-            CI_REGISTRY_USER: ${{ secrets.CI_REGISTRY_USER }}
-            CI_REGISTRY_PASSWORD: ${{ secrets.CI_REGISTRY_PASSWORD }}
-            CI_REGISTRY_IMAGE: ${{ secrets.CI_REGISTRY_IMAGE }}
+        run: |
+          docker stop my-container || true
+          docker rm my-container || true
+          docker run -d --name my-container -p 9091:9091 ${{ secrets.CI_REGISTRY_IMAGE }}
