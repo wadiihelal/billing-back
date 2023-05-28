@@ -30,5 +30,16 @@ jobs:
           docker build -t wadiih/billing_back:${{ github.sha }} .
           docker login -u wadiih -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker push wadiih/billing_back:${{ github.sha }}
+  deploy-locally:
+      runs-on: ubuntu-latest
 
+      steps:
+        - name: Set up Docker
+          uses: docker/setup-buildx-action@v1
+
+        - name: Pull Docker image
+          run: docker pull wadiih/billing_back:${{ github.sha }}
+
+        - name: Run Docker container
+          run: docker run -d -p 9090:9090 wadiih/billing_back:${{ github.sha }}
 
